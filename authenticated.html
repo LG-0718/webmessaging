@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Genesys Cloud Authenticated WebMessaging Example</title>
+    <script src="https://global.oktacdn.com/okta-auth-js/7.4.2/okta-auth-js.min.js"></script>
+</head>
+
+<body>
+
+    <h1>Genesys Cloud WebMessaging Example</h1>
+
+    <ul>
+        <li><a href="index.html">Genesys Test Site Home Page</a></li>
+        <li><a href="#" onclick="signOut()">Sign Out</a></li>
+    </ul>
+
+    <div id="login-message"></div>
+
+    <script type="text/javascript">
+        // Configuração do Okta (SUBSTITUA COM SEUS DADOS)
+        const oktaConfig = {
+            clientId: "0oanh1tn2aD6SvlNm5d7",
+            issuer: "https://dev-74567406.okta.com/oauth2/default",
+            redirectUri: "https://api-training-team.github.io/webchat_webmessaging/authenticated.html",
+            scopes: ["openid", "profile", "email", "offline_access"], 
+            responseType: "code",
+            pkce: false, // Sem PKCE
+            maxAge: 3600
+        };
+
+        const authClient = new OktaAuth(oktaConfig);
+
+        async function checkAuthentication() {
+            try {
+                const token = await authClient.tokenManager.get('idToken');
+
+                if (token) {
+                    document.getElementById("login-message").innerHTML = `<p>Welcome, ${token.claims.name}!</p>`;
+                    initializeGenesysWebMessaging(token.idToken);
+                } else {
+                    console.log("Usuário não autenticado. Iniciando login...");
+                    login();
+                }
+            } catch (error) {
+                console.error("Erro ao verificar autenticação:", error);
+                login();
+            }
+        }
+
+        // Inicia o login via Okta Auth SDK
+        async function login() {
+            console.log("Redirecionando para login do Okta...");
+
+            try {
+                await authClient.token.getWithRedirect({
+                    responseType: "code",
+                    scopes: oktaConfig.scopes
+                });
+            } catch (error) {
+                console.error("Erro ao iniciar login:", error);
+            }
+        }
+
+        // Após login, troca o código de autorização por tokens
+        async function handleLoginCallback() {
+            try {
+                const tokenResponse = await authClient.token.parseFromUrl();
+                
+                if (!tokenResponse.tokens || !tokenResponse.tokens.idToken) {
+                    throw new Error("Nenhum token recebido do Okta!");
+                }
+
+                // Armazena os tokens no gerenciador do Okta
+                authClient.tokenManager.setTokens(tokenResponse.tokens);
+
+                console.log("Tokens armazenados com sucesso!");
+
+                // Remove código da URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+
+                checkAuthentication();
+            } catch (error) {
+                console.error("Erro ao processar callback de login:", error);
+            }
+        }
+
+        // Inicializa Genesys Web Messaging com autenticação JWT
+        function initializeGenesysWebMessaging(jwtToken) {
+            console.log("Iniciando Genesys Web Messaging...");
+
+            if (!jwtToken) {
+                console.error("JWT não encontrado! O Genesys Messenger não será inicializado.");
+                return;
+            }
+
+            (function (g, e, n, es, ys) {
+                g['_genesysJs'] = e;
+                g[e] = g[e] || function () {
+                    (g[e].q = g[e].q || []).push(arguments);
+                };
+                g[e].t = 1 * new Date();
+                g[e].c = es;
+                ys = document.createElement('script');
+                ys.async = 1;
+                ys.src = n;
+                ys.charset = 'utf-8';
+                ys.onload = function () {
+                    console.log("Genesys Web Messenger carregado com sucesso!");
+                };
+                ys.onerror = function () {
+                    console.error("Erro ao carregar Genesys Web Messenger.");
+                };
+                document.head.appendChild(ys);
+            })(window, 'Genesys', 'https://apps.mypurecloud.ie/genesys-bootstrap/genesys.min.js', {
+                environment: 'prod-euw1',
+                deploymentId: '243dcd97-e195-49bd-b234-bb405c772b66',
+                messenger: {
+                    authentication: {
+                        jwt: jwtToken
+                    }
+                }
+            });
+        }
+
+        // Logout do usuário e redireciona para a página inicial
+        async function signOut() {
+            await authClient.signOut();
+            window.location.href = "https://api-training-team.github.io/webchat_webmessaging/";
+        }
+
+        // Verifica se estamos na página de callback do login e processa a autenticação
+        if (window.location.href.includes("code=")) {
+            handleLoginCallback();
+        } else {
+            checkAuthentication();
+        }
+    </script>
+
+</body>
+
+</html>
