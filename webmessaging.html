@@ -34,7 +34,7 @@
 </script>
 
 <script type="text/javascript" charset="utf-8">	
-alert("is this not workings - new");	
+alert("is this not workings - new again");	
 console.log("Is this being executed - new?");
 
 	 Genesys('subscribe', 'Messenger.open', (e) => {
@@ -53,7 +53,12 @@ console.log("Is this being executed - new?");
 	 Genesys('subscribe', 'Messenger.closed', (e) => {
         console.log("Messenger Messenger.closed");
       });
-  	
+
+function myFunction() {
+	console.log("Call This");
+  Genesys("command", "MessagingService.clearConversation");
+}
+	
 </script>
 
 <script>
@@ -69,5 +74,7 @@ console.log("Is this being executed - new?");
 
 	<h1>Gencloud Sample Page</h1>
 	<div id="genesys-support-center""></div>
+
+	 <button type="button" onclick="myFunction()">Clear me!</button> 
 </body>
 </html>
