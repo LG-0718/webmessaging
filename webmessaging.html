@@ -34,33 +34,26 @@
 </script>
 
 <script type="text/javascript" charset="utf-8">	
-alert("is this not workings");	
-console.log("Is this being executed?");
-	
-Genesys("subscribe", "Messenger.opened", {},
-  function(o){
-	   console.log("MessagingService.clearConversation");	
-	Genesys("command", "MessagingService.clearConversation");
-	
-  },  
-  function(o){    
-	console.log("MessagingService.resetConversation");
-	Genesys("command", "MessagingService.resetConversation");
+alert("is this not workings - new");	
+console.log("Is this being executed - new?");
 
-  }
-);
+	 Genesys('subscribe', 'Messenger.open', (e) => {
+        console.log("Messenger Open");
+      });
+	
+   Genesys('subscribe', 'Messenger.opened', (e) => {
+        console.log("Messenger Opened");
+      });
 
 
-Genesys("subscribe", "Messenger.closed", {},
-  function(o){
-	console.log("MessagingService.clearConversation close");	
-	Genesys("command", "MessagingService.clearConversation");
-	
-  },  
-  function(o){    
-  }
-);	
-	
+	 Genesys('subscribe', 'Messenger.close', (e) => {
+        console.log("Messenger Messenger.close");
+      });
+
+	 Genesys('subscribe', 'Messenger.closed', (e) => {
+        console.log("Messenger Messenger.closed");
+      });
+  	
 </script>
 
 <script>
