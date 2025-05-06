@@ -34,17 +34,18 @@
 </script>
 
 <script type="text/javascript" charset="utf-8">	
-Genesys('subscribe', 'Messenger.open', () => {
-  Genesys("command", "MessagingService.clearConversation", 
-    {}, 
-    function() {
-    console.log("The works!");
-    },
-    function() {
-    console.log("The doesn't works!");
-    });
-});
 
+Genesys("command", "Messenger.opened", {},
+  function(o){
+	 console.log("MessagingService.resetConversation");
+	Genesys("command", "MessagingService.resetConversation");
+	
+  },  // if resolved
+  function(o){    // if rejected
+   console.log("MessagingService.clearConversation");	
+	Genesys("command", "MessagingService.clearConversation");
+  }
+);
 	
 </script>
 
