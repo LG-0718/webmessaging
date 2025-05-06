@@ -31,7 +31,16 @@
     deploymentId: '61c42509-44b5-4e02-b7fc-6546d3777d48'
   });
   
- 
+Genesys("command", "MessagingService.resetConversation",{},
+    function() {
+        /*fulfilled callback*/
+    },
+    function() {
+        /*rejected callback*/
+    }
+);
+
+	
 </script>
 
 <script>
