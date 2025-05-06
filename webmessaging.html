@@ -35,15 +35,16 @@
 
 <script type="text/javascript" charset="utf-8">	
 
-Genesys("command", "Messenger.open", {},
+Genesys("subscribe", "Messenger.open", {},
   function(o){
-	 console.log("MessagingService.resetConversation");
-	Genesys("command", "MessagingService.resetConversation");
+	   console.log("MessagingService.clearConversation");	
+	Genesys("command", "MessagingService.clearConversation");
 	
   },  // if resolved
   function(o){    // if rejected
-   console.log("MessagingService.clearConversation");	
-	Genesys("command", "MessagingService.clearConversation");
+		 console.log("MessagingService.resetConversation");
+	Genesys("command", "MessagingService.resetConversation");
+
   }
 );
 	
