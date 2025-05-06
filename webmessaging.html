@@ -34,19 +34,31 @@
 </script>
 
 <script type="text/javascript" charset="utf-8">	
-
-Genesys("subscribe", "Messenger.open", {},
+console.log("Is this being executed?");
+	
+Genesys("subscribe", "Messenger.opened", {},
   function(o){
 	   console.log("MessagingService.clearConversation");	
 	Genesys("command", "MessagingService.clearConversation");
 	
-  },  // if resolved
-  function(o){    // if rejected
-		 console.log("MessagingService.resetConversation");
+  },  
+  function(o){    
+	console.log("MessagingService.resetConversation");
 	Genesys("command", "MessagingService.resetConversation");
 
   }
 );
+
+
+Genesys("subscribe", "Messenger.closed", {},
+  function(o){
+	console.log("MessagingService.clearConversation close");	
+	Genesys("command", "MessagingService.clearConversation");
+	
+  },  
+  function(o){    
+  }
+);	
 	
 </script>
 
