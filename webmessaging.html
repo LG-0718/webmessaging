@@ -54,6 +54,15 @@ console.log("Is this being executed - new1?");
         console.log("Messenger Messenger.closed");
       });
 
+	
+Genesys("command", "Database.set", {
+  messaging: {
+    customAttributes: {
+ 	 name: "MessengerUser"
+    }
+
+  }
+});	
 
 
 function myFunction() {
