@@ -34,7 +34,7 @@
 </script>
 
 <script type="text/javascript" charset="utf-8">	
-alert("is this not workings - new again");	
+//alert("is this not workings - new again");	
 console.log("Is this being executed - new?");
 
 	 Genesys('subscribe', 'Messenger.open', (e) => {
@@ -53,6 +53,15 @@ console.log("Is this being executed - new?");
 	 Genesys('subscribe', 'Messenger.closed', (e) => {
         console.log("Messenger Messenger.closed");
       });
+
+Genesys("command", "Database.set", {
+  messaging: {
+    customAttributes: {
+ 	 name: "Joe Customer"
+    }
+
+  }
+});	
 
 function myFunction() {
 	console.log("Call This");
