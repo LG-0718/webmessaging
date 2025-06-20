@@ -37,17 +37,21 @@
 //alert("is this not workings - new again ");	
 console.log("Is this being executed - new3?");
 
-Genesys("command", "Messenger.open",{
-	
-},
-    function() {
-	console.log("Messenger Open via command");
-        /*fulfilled callback*/
+Genesys('subscribe', 'Messenger.ready', function () {
+  Genesys(
+    'command',
+    'Messenger.open',
+    {},
+    () => {
+     /*fulfilled callback*/
+     console.log('Messenger opened via script load');
     },
-    function() {
-        /*rejected callback*/
+    (error) => {
+     /*rejected callback*/
+     console.log("Couldn't open messenger.", error);
     }
-);
+  );
+});
 
 	 Genesys('subscribe', 'Messenger.open', (e) => {
         console.log("Messenger Open");
