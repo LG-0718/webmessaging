@@ -69,6 +69,25 @@ function myFunction() {
 	console.log("Call This");
   Genesys("command", "MessagingService.clearConversation");
 }
+
+
+function sendMessage() {
+	Genesys('subscribe', 'MessagingService.ready', () => {
+	  Genesys(
+	    'command',
+	    'MessagingService.sendMessage',
+	    { message: 'This is a test message - Genesys' },
+	    (data) => {
+	      data ? console.log(data) : null;
+	      console.log('Message sent');
+	    },
+	    (error) => {
+	      error ? console.log(error) : null;
+	      console.log('Error sending message');
+	    }
+	  );
+	});
+}	
 	
 </script>
 
@@ -87,5 +106,6 @@ function myFunction() {
 	<div id="genesys-support-center""></div>
 
 	 <button type="button" onclick="myFunction()">Clear me!</button> 
+	<button type="button" onclick="sendMessage()">Send Message!</button>
 </body>
 </html>
