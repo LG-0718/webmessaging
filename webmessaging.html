@@ -72,7 +72,7 @@ function myFunction() {
 
 
 function sendMessage() {
-	Genesys('subscribe', 'MessagingService.ready', () => {
+	//Genesys('subscribe', 'MessagingService.ready', () => {
 	  Genesys(
 	    'command',
 	    'MessagingService.sendMessage',
@@ -86,7 +86,7 @@ function sendMessage() {
 	      console.log('Error sending message');
 	    }
 	  );
-	});
+	//});
 }	
 	
 </script>
