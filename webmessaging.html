@@ -37,6 +37,18 @@
 //alert("is this not workings - new again ");	
 console.log("Is this being executed - new3?");
 
+Genesys("command", "Messenger.open",{
+	
+},
+    function() {
+	console.log("Messenger Open via command");
+        /*fulfilled callback*/
+    },
+    function() {
+        /*rejected callback*/
+    }
+);
+
 	 Genesys('subscribe', 'Messenger.open', (e) => {
         console.log("Messenger Open");
       });
@@ -72,7 +84,7 @@ function myFunction() {
 
 
 function sendMessage() {
-	//Genesys('subscribe', 'MessagingService.ready', () => {
+	Genesys('subscribe', 'MessagingService.ready', () => {
 	  Genesys(
 	    'command',
 	    'MessagingService.sendMessage',
@@ -86,7 +98,7 @@ function sendMessage() {
 	      console.log('Error sending message');
 	    }
 	  );
-	//});
+	});
 }	
 	
 </script>
